@@ -63,14 +63,40 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+class Coord {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  equals(coord2) {
+    return (this.x == coord2.x) && (this.y == coord2.y);
+  }
+
+  isOpposite(coord2) {
+    return (this.x == (-1 * coord2.x)) && (this.y == (-1 * coord2.y));
+  }
+
+  plus(coord2) {
+    return new Coord(this.x + coord2.x, this.y + coord2.y);
+  }
+}
+
+module.exports = Coord;
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const DOMNodeCollection = __webpack_require__(2);
+const DOMNodeCollection = __webpack_require__(3);
 
 const functionQueue = [];
 let docReady = false;
@@ -138,19 +164,23 @@ module.exports = $p;
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Board = __webpack_require__(3);
-const $p = __webpack_require__(0);
+const Board = __webpack_require__(5);
+const $p = __webpack_require__(1);
 
 class gameView{
   constructor(rootEl) {
     this.rootEl = rootEl;
     this.board = new Board();
     this.grid = this.buildGrid();
+    this.scoreEl = $p('.score');
+    this.highScoreEl = $p('.high-score');
+    this.gameOverEl = $p('.game-over');
+    this.restart = this.restart.bind(this);
     $p(window).on("keydown", this.handleKeyEvent.bind(this));
-    this.gameInterval = window.setInterval( this.step.bind(this), 100);
+    // this.gameInterval = window.setInterval( this.step.bind(this), 100);
   }
 
   buildGrid() {
@@ -175,32 +205,69 @@ class gameView{
   render() {
     this.updateClasses(this.board.snake.segments, "snake");
     this.updateClasses([this.board.apple.position], "apple");
+    this.updateSnakeHead();
     this.updateScore();
   }
 
   updateClasses(coords, className) {
     $p(`.${className}`).removeClass(className);
-    coords.forEach( coord => {
-      const flatCoord = (coord.x * this.board.dimension) + coord.y;
-      if (this.liList) {
-        this.liList.eq(flatCoord).addClass(className);
-      }
-    });
+    if (coords) {
+      coords.forEach( coord => {
+        const flatCoord = (coord.x * this.board.dimension) + coord.y;
+        if (this.liList) {
+          this.liList.eq(flatCoord).addClass(className);
+        }
+      });
+    }
   }
 
+  updateSnakeHead() {
+    $p(`.snake-head`).removeClass('snake-head');
+    let coord = this.board.snake.segments[this.board.snake.segments.length-1];
+    if (coord) {
+      let flatCoord = coord.x * this.board.dimension + coord.y;
+      this.liList.eq(flatCoord).addClass('snake-head');
+    }
+  }
+  
   updateScore() {
-    this.scoreEl = $p('.score');
-
     this.scoreEl.html(`Score: ${this.board.score}`);
+    this.highScoreEl.html(`High Score: ${this.board.highScore}`);
   }
+
+  updateHighScore () {
+    let score = this.board.score;
+    let highScore = this.board.highScore;
+    if (score > highScore) {
+      highScore = score;
+      score = 0;
+    }
+    this.scoreEl.html(`Score: ${score}`);
+    this.highScoreEl.html(`High Score: ${highScore}`);
+  }
+
   step() {
     if (this.board.snake.segments.length > 0 ) {
       this.board.snake.move();
       this.render();
     } else {
-      alert('you lose');
-      window.clearInterval(this.gameInterval);
+      this.updateHighScore();
+      this.renderGameOver();
     }
+  }
+
+  renderGameOver() {
+    this.gameOverEl.removeClass('hidden');
+    this.gameOverEl.on('click', () => {
+      this.gameOverEl.addClass('hidden');
+      this.board = new Board(Math.max(this.board.score, this.board.highScore));
+      window.clearInterval(this.gameInterval);
+      this.gameInterval = window.setInterval( this.step.bind(this), 100);
+    });
+  }
+
+  restart() {
+    this.gameInterval = window.setInterval( this.step.bind(this), 100);
   }
 }
 
@@ -215,7 +282,7 @@ module.exports = gameView;
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports) {
 
 class DOMNodeCollection {
@@ -324,17 +391,49 @@ module.exports = DOMNodeCollection;
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Snake = __webpack_require__(6);
-const Coord = __webpack_require__(4);
-const Apple = __webpack_require__(7);
+const Coord = __webpack_require__(0);
+
+class Apple {
+  constructor(board) {
+    this.board = board;
+    this.placeApple();
+  }
+
+  placeApple() {
+    let x = Math.floor(Math.random() * this.board.dimension);
+    let y = Math.floor(Math.random() * this.board.dimension);
+    // debugger
+    while (this.board.snake.hasCoord([x, y])) {
+      x = Math.floor(Math.random() * this.board.dimension);
+      y = Math.floor(Math.random() * this.board.dimension);
+    }
+    this.position = new Coord(x, y);
+  }
+}
+
+module.exports = Apple;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Snake = __webpack_require__(7);
+const Coord = __webpack_require__(0);
+const Apple = __webpack_require__(4);
 
 class Board {
-  constructor() {
+  constructor(highScore) {
     this.snake = new Snake(this);
     this.score = 0;
+    if (highScore) {
+      this.highScore = highScore;
+    } else {
+      this.highScore = 0;
+    }
     this.dimension = 25;
     this.apple = new Apple(this);
   }
@@ -349,49 +448,29 @@ module.exports = Board;
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-class Coord {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-
-  equals(coord2) {
-    return (this.x == coord2.x) && (this.y == coord2.y);
-  }
-
-  isOpposite(coord2) {
-    return (this.x == (-1 * coord2.x)) && (this.y == (-1 * coord2.y));
-  }
-
-  plus(coord2) {
-    return new Coord(this.x + coord2.x, this.y + coord2.y);
-  }
-}
-
-module.exports = Coord;
-
-
-/***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const $p = __webpack_require__(0);
-const gameView = __webpack_require__(1);
+const $p = __webpack_require__(1);
+const gameView = __webpack_require__(2);
 
 document.addEventListener('DOMContentLoaded', () => {
+  $p('.new-game').removeClass('hidden');
   const rootEl = $p('.grid');
   const view = new gameView(rootEl);
+  $p('.new-game').on('click', () => {
+    view.gameInterval = setInterval( view.step.bind(view), 100);
+
+    $p('.new-game').addClass('hidden');
+  });
 });
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Coord = __webpack_require__(4);
+const Coord = __webpack_require__(0);
 
 class Snake {
   constructor(board) {
@@ -491,33 +570,6 @@ Snake.MOVES = {
 
 
 module.exports = Snake;
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Coord = __webpack_require__(4);
-
-class Apple {
-  constructor(board) {
-    this.board = board;
-    this.placeApple();
-  }
-
-  placeApple() {
-    let x = Math.floor(Math.random() * this.board.dimension);
-    let y = Math.floor(Math.random() * this.board.dimension);
-    // debugger
-    while (this.board.snake.hasCoord([x, y])) {
-      x = Math.floor(Math.random() * this.board.dimension);
-      y = Math.floor(Math.random() * this.board.dimension);
-    }
-    this.position = new Coord(x, y);
-  }
-}
-
-module.exports = Apple;
 
 
 /***/ })

@@ -34,10 +34,6 @@ ul {
   display: flex;
 }
 
-.hidden {
-  display: none;
-}
-
 body {
   left: 50%;
   text-align: center;
@@ -49,4 +45,72 @@ body {
 
 .apple {
   background: red;
+}
+
+.game-over, .new-game {
+  background: white;
+  border: 1px solid black;
+  display: block;
+  width: 150px;
+  position: absolute;
+  left: 50%;
+  top: 200px;
+  padding: 20px;
+  margin-left: -96px;
+  /*margin: 0px auto;*/
+}
+
+.game-over:hover, .new-game:hover {
+  background: black;
+  color: white;
+  cursor: pointer;
+}
+
+/*.directions {
+  margin-top: 30px;
+}*/
+.hidden {
+  display: none;
+}
+
+.snake-head {
+  background: orange;
+}
+
+#footer {
+  display: flex;
+  position: absolute;
+  left: 50%;
+  margin-left: -215px;
+  margin-top: 20px;
+  border: 1px solid gray;
+  font-size: 16px;
+  color: black;
+}
+
+#footer-left, #footer-right {
+  padding: 10px;
+}
+
+#footer-left {
+  border-right: 1px solid black;
+  /*padding-right: 20px;*/
+}
+
+#footer-right {
+  display: flex;
+  justify-content: space-around;
+  width: 310px;
+  /*margin-left: 90px;*/
+  font-weight: bold;
+}
+
+#name, a {
+  text-decoration: none;
+  /*margin-left: 20px;*/
+
+}
+
+a:hover {
+  color: red;
 }
