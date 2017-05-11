@@ -1,0 +1,87 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+  font-family: sans-serif;
+  list-style: none;
+}
+
+.background {
+  background: rgb(200, 199, 199);
+}
+
+.todo-container {
+  background: rgb(171, 180, 240);
+  width: 400px;
+  height: 100%;
+  text-align: center;
+  margin: 50px auto;
+  border-radius: 5px;
+  border: 1px solid black;
+}
+
+#todo-list-title {
+  font-size: 35px;
+  padding: 10px;
+  font-weight: bold;
+}
+
+li {
+  margin: 0 auto;
+  width: 300px;
+  text-overflow:
+  text-align: left;
+  padding: 2px 0px;
+  font-size: 16px;
+}
+
+.input-body {
+  width: 170px;
+  height: 25px;
+  font-size: 15px;
+}
+
+.remove-button {
+  margin: 5px 0px;
+  width: 100px;
+  height: 23px;
+  font-size: 13px;
+  background: rgb(161, 36, 36);
+  color: white;
+  border: 1px solid black;
+}
+
+.submit-button {
+  margin: 15px 0px 5px 0px;
+  width: 150px;
+  height: 35px;
+  font-size: 17px;
+  background: rgb(18, 128, 58);
+  color: white;
+  border: 1px solid black;
+}
+
+.clear-button {
+  margin: 5px 0px;
+  width: 150px;
+  height: 35px;
+  font-size: 17px;
+  background: rgb(161, 36, 36);
+  color: white;
+  border: 1px solid black;
+}
