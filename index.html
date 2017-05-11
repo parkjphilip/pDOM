@@ -4,15 +4,37 @@
     <meta charset="utf-8">
     <title></title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript" src="lib/pdom.js"></script>
     <link rel="stylesheet" type="text/css" href="css/snake.css" />
-    <!-- <link rel="stylesheet" type="text/css" href="css/style.css" /> -->
 
   </head>
   <body>
-    <h1>Snake</h1>
+    <br>
+    <h1>Welcome to Snake!</h1>
     <figure class="grid"></figure>
+    <div class="game-over hidden">
+      Game Over
+      <br>
+      Click for New Game!
+    </div>
+    <div class="new-game hidden">New Game</div>
     <div class="score"></div>
+    <div class="high-score"></div>
+    <br>
+    <div class="directions">
+      Use the arrow keys to guide the snake to the red square.
+      <br>
+      Avoid colliding with walls or yourself
+    </div>
+    <div id="footer">
+      <div id="footer-left">
+        <div id="name">Philip Park</div>
+      </div>
+      <div id="footer-right">
+        <a href="http://philippark.us/">Portfolio</a>
+        <a href="https://github.com/parkjphilip">Github</a>
+        <a href="https://www.linkedin.com/in/philipjpark/">LinkedIn</a>
+      </div>
+    </div>
   </body>
   <script type="text/javascript" src="./bundle.js">  </script>
 </html>

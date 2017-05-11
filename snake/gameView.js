@@ -6,8 +6,12 @@ class gameView{
     this.rootEl = rootEl;
     this.board = new Board();
     this.grid = this.buildGrid();
+    this.scoreEl = $p('.score');
+    this.highScoreEl = $p('.high-score');
+    this.gameOverEl = $p('.game-over');
+    this.restart = this.restart.bind(this);
     $p(window).on("keydown", this.handleKeyEvent.bind(this));
-    this.gameInterval = window.setInterval( this.step.bind(this), 100);
+    // this.gameInterval = window.setInterval( this.step.bind(this), 100);
   }
 
   buildGrid() {
@@ -32,32 +36,69 @@ class gameView{
   render() {
     this.updateClasses(this.board.snake.segments, "snake");
     this.updateClasses([this.board.apple.position], "apple");
+    this.updateSnakeHead();
     this.updateScore();
   }
 
   updateClasses(coords, className) {
     $p(`.${className}`).removeClass(className);
-    coords.forEach( coord => {
-      const flatCoord = (coord.x * this.board.dimension) + coord.y;
-      if (this.liList) {
-        this.liList.eq(flatCoord).addClass(className);
-      }
-    });
+    if (coords) {
+      coords.forEach( coord => {
+        const flatCoord = (coord.x * this.board.dimension) + coord.y;
+        if (this.liList) {
+          this.liList.eq(flatCoord).addClass(className);
+        }
+      });
+    }
   }
 
+  updateSnakeHead() {
+    $p(`.snake-head`).removeClass('snake-head');
+    let coord = this.board.snake.segments[this.board.snake.segments.length-1];
+    if (coord) {
+      let flatCoord = coord.x * this.board.dimension + coord.y;
+      this.liList.eq(flatCoord).addClass('snake-head');
+    }
+  }
+  
   updateScore() {
-    this.scoreEl = $p('.score');
-
     this.scoreEl.html(`Score: ${this.board.score}`);
+    this.highScoreEl.html(`High Score: ${this.board.highScore}`);
   }
+
+  updateHighScore () {
+    let score = this.board.score;
+    let highScore = this.board.highScore;
+    if (score > highScore) {
+      highScore = score;
+      score = 0;
+    }
+    this.scoreEl.html(`Score: ${score}`);
+    this.highScoreEl.html(`High Score: ${highScore}`);
+  }
+
   step() {
     if (this.board.snake.segments.length > 0 ) {
       this.board.snake.move();
       this.render();
     } else {
-      alert('you lose');
-      window.clearInterval(this.gameInterval);
+      this.updateHighScore();
+      this.renderGameOver();
     }
+  }
+
+  renderGameOver() {
+    this.gameOverEl.removeClass('hidden');
+    this.gameOverEl.on('click', () => {
+      this.gameOverEl.addClass('hidden');
+      this.board = new Board(Math.max(this.board.score, this.board.highScore));
+      window.clearInterval(this.gameInterval);
+      this.gameInterval = window.setInterval( this.step.bind(this), 100);
+    });
+  }
+
+  restart() {
+    this.gameInterval = window.setInterval( this.step.bind(this), 100);
   }
 }
 

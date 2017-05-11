@@ -3,9 +3,14 @@ const Coord = require("./coord.js");
 const Apple = require("./apple.js");
 
 class Board {
-  constructor() {
+  constructor(highScore) {
     this.snake = new Snake(this);
     this.score = 0;
+    if (highScore) {
+      this.highScore = highScore;
+    } else {
+      this.highScore = 0;
+    }
     this.dimension = 25;
     this.apple = new Apple(this);
   }
