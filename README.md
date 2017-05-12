@@ -3,7 +3,7 @@
 [Snake Demo][link]
 [link]: http://www.philippark.us/pDOM
 
-<img src="Assets/snake_screenshot.png" width="400">
+<img src="assets/snake_screenshot.png" width="400">
 
 
 ## Background
