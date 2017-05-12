@@ -1,7 +1,6 @@
 # pDOM
 
-[Snake Demo][link]
-[link]: http://www.philippark.us/pDOM
+[Snake Demo](http://www.philippark.us/pDOM)
 
 <img src="assets/snake_screenshot.png" width="400">
 
