@@ -17,7 +17,7 @@ To use pDOM, start by downloading pDOM and include it in your project directory.
 Then, include the following script tag in the 'head' section of your HTML document:
 
 ``` javascript
-  <script type="text/javascript" src="lib/pdom.js"></script>
+  <script type="text/javascript" src="lib/main.js"></script>
 ```
 
 ## Examples
