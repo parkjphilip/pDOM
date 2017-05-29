@@ -52,10 +52,6 @@ class Snake {
     if (!this.isValid()) {
       this.segments = [];
     }
-    // destroy snake if it eats itself or runs off grid
-    // if (!this.isValid()) {
-    //   this.segments = [];
-    // }
   }
 
   turn(direction) {

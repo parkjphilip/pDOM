@@ -11,7 +11,6 @@ class gameView{
     this.gameOverEl = $p('.game-over');
     this.restart = this.restart.bind(this);
     $p(window).on("keydown", this.handleKeyEvent.bind(this));
-    // this.gameInterval = window.setInterval( this.step.bind(this), 100);
   }
 
   buildGrid() {
@@ -60,7 +59,7 @@ class gameView{
       this.liList.eq(flatCoord).addClass('snake-head');
     }
   }
-  
+
   updateScore() {
     this.scoreEl.html(`Score: ${this.board.score}`);
     this.highScoreEl.html(`High Score: ${this.board.highScore}`);
