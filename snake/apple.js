@@ -9,7 +9,6 @@ class Apple {
   placeApple() {
     let x = Math.floor(Math.random() * this.board.dimension);
     let y = Math.floor(Math.random() * this.board.dimension);
-    // debugger
     while (this.board.snake.hasCoord([x, y])) {
       x = Math.floor(Math.random() * this.board.dimension);
       y = Math.floor(Math.random() * this.board.dimension);
